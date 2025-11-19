@@ -9,6 +9,8 @@ class CounterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final counterBloc = context.read<CounterBloc>();
+
     return Scaffold(
       appBar: AppBar(title: const Text('Counter App Demo')),
       body: Center(
@@ -19,7 +21,16 @@ class CounterPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('$state', style: const TextStyle(fontSize: 98.0)),
+                  // if (state is CounterLoading) ...[
+                  //   const CircularProgressIndicator(),
+                  // ] else ...[
+                    
+                  // ],
+
+                  Text(
+                      '${state is CounterValue ? state.count : "Not a counter value"}',
+                      style: const TextStyle(fontSize: 40.0),
+                    ),
                   SizedBox(height: 160.0),
 
                   Row(
@@ -44,8 +55,7 @@ class CounterPage extends StatelessWidget {
                             ),
                           ),
                           icon: const Icon(Icons.remove, color: Colors.white),
-                          onPressed: () =>
-                              context.read<CounterBloc>().add(Decrement()),
+                          onPressed: () => counterBloc.add(Decrement()),
                         ),
                       ),
                       SizedBox(width: 8.0),
@@ -70,7 +80,7 @@ class CounterPage extends StatelessWidget {
                           ),
 
                           icon: const Icon(Icons.add, color: Colors.white),
-                          onPressed: () => context.read<CounterBloc>().add(Increment()),
+                          onPressed: () => counterBloc.add(Increment()),
                         ),
                       ),
                     ],
@@ -81,6 +91,6 @@ class CounterPage extends StatelessWidget {
           },
         ),
       ),
-    );;
+    );
   }
 }

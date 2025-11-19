@@ -1,6 +1,9 @@
 import 'package:counter_demo/bloc/bloc/counter_bloc.dart';
-import 'package:counter_demo/bloc/bloc/counter_event.dart';
 import 'package:counter_demo/bloc/bloc/counter_state.dart';
+import 'package:counter_demo/bloc/bloc/counter_event.dart';
+import 'package:counter_demo/bloc/widgets/action_button.dart';
+import 'package:counter_demo/bloc/widgets/counter_app_bar.dart';
+import 'package:counter_demo/bloc/widgets/counter_display.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -9,10 +12,8 @@ class CounterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final counterBloc = context.read<CounterBloc>();
-
     return Scaffold(
-      appBar: AppBar(title: const Text('Counter App Demo')),
+      appBar: const CounterAppBar(),
       body: Center(
         child: BlocBuilder<CounterBloc, CounterState>(
           builder: (context, state) {
@@ -21,66 +22,29 @@ class CounterPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // if (state is CounterLoading) ...[
-                  //   const CircularProgressIndicator(),
-                  // ] else ...[
-                    
-                  // ],
-
-                  Text(
-                      '${state is CounterValue ? state.count : "Not a counter value"}',
-                      style: const TextStyle(fontSize: 40.0),
-                    ),
-                  SizedBox(height: 160.0),
-
+                  CounterDisplay(state: state),
+                  const SizedBox(height: 160.0),
                   Row(
                     children: [
                       Expanded(
                         flex: 1,
-                        child: IconButton(
-                          style: ButtonStyle(
-                            backgroundColor: WidgetStateProperty.all(
-                              Colors.red,
-                            ),
-                            side: WidgetStateProperty.all(
-                              BorderSide(
-                                width: 2.0,
-                                color: Colors.red.shade700,
-                              ),
-                            ),
-                            shape: WidgetStateProperty.all(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12.0),
-                              ),
-                            ),
-                          ),
-                          icon: const Icon(Icons.remove, color: Colors.white),
-                          onPressed: () => counterBloc.add(Decrement()),
+                        child: ActionButton(
+                          icon: Icons.remove,
+                          color: Colors.red,
+                          borderColor: Colors.red.shade700,
+                          onPressed: () =>
+                              context.read<CounterBloc>().add(Decrement()),
                         ),
                       ),
-                      SizedBox(width: 8.0),
+                      const SizedBox(width: 8.0),
                       Expanded(
                         flex: 1,
-                        child: IconButton(
-                          style: ButtonStyle(
-                            backgroundColor: WidgetStateProperty.all(
-                              Colors.blue,
-                            ),
-                            side: WidgetStateProperty.all(
-                              BorderSide(
-                                width: 2.0,
-                                color: Colors.blue.shade700,
-                              ),
-                            ),
-                            shape: WidgetStateProperty.all(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12.0),
-                              ),
-                            ),
-                          ),
-
-                          icon: const Icon(Icons.add, color: Colors.white),
-                          onPressed: () => counterBloc.add(Increment()),
+                        child: ActionButton(
+                          icon: Icons.add,
+                          color: Colors.blue,
+                          borderColor: Colors.blue.shade700,
+                          onPressed: () =>
+                              context.read<CounterBloc>().add(Increment()),
                         ),
                       ),
                     ],
